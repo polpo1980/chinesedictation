@@ -9,6 +9,10 @@ class Errors(object):
 				[],  # lesson 1				
 				["捆绑","铺天盖地"],  #lesson 2
 				["充满"],  #lesson 3
-				[], # lesson 4
-]
+				["腾云驾雾","挖洞"], # lesson 4
+			]
+	errorChineseExam4 = [
+ 				["昂首怒放","武器"], # 周练 1
+	
+			    ]
 
