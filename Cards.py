@@ -5,10 +5,11 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 class Cards(object):
-	card4 =[ 
-			[["gāo", "zhěn", "wú", "yōu"],["nuǎn", "yáng", "yáng"],["chén", "xī"],["sā", "wǎng"],["sā", "tuǐ"],["tái", "tóu"],["tái", "gāo"],["tái", "ju"] ], # lesson 1
-			[["miáo", "tiáo"],["fán", "róng"],["zhī", "fán", "yè", "mào"],["pū", "tiān", "gài", "dì"],["kǔn", "bǎng"],["bān", "jiā"],["biān", "zhī"]],    # lesson 2
-			[["qiāng", "lín", "dàn", "yǔ"],["tǒng", "yī"],["hǎi", "zǎo"],["guǒ", "dòng"],["bīng", "dòng"],["hé", "zuò"],["hé", "qíng", "hé", "lǐ"]],     # lesson 3
-			[["qiǎng", "jiù"],["chuàng", "jiàn"],["è", "hěn", "hěn"],["chā", "huā"],["xíng", "shǐ"],["shāng", "tǎo"],["gōng", "dǎ"],["jìn", "gōng"],["wā", "dòng"]],  # lesson 4
-		   ]
+	cardChinese4 = [
+				["高枕无忧","暖洋洋","晨曦","撒网","撒腿","抬头","抬高","抬举"],   # lesson 1
+				["苗条","繁荣","枝繁叶茂","铺天盖地","捆绑","搬家","编织"],       # lesson 2
+				["枪林弹雨","统一","海藻","果冻","冰冻","合作","合情合理"],       # lesson 3
+				["抢救","创建","恶狠狠","插花","行驶","商讨","攻打","进攻","挖洞"], # lesson 4
+		       ]
+
 

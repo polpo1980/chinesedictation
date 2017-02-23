@@ -11,10 +11,10 @@ class Books(object):
 			"小黑鱼",          # lesson 3
 			"沙滩上的童话",     # lesson 4
                        ]
-	book4 =[ 
-		  [["huā", "shù"],["xiāng","qì"],["wēn", "nuǎn"],["lùi", "shui"],["zhěn", "tou"],["jié", "máo"],["sǎ"] ], # lesson 1
-		  [["xiǎng", "shòu"],["sēn","lín"],["xiāng", "xìn"],["zá", "cǎo"],["fán", "mì"],["zhī", "yā"],["zhāo", "qì", "péng", "bó"],["dèng", "zi"]], # lesson 2
-		  [["kuài", "lè"],["jīn", "qiāng", "yú"],["qī", "hēi"],["chōng", "mǎn"],["cǎi", "hóng"],["guǒ", "dòng"],["qīng", "liáng"]],         # lesson 3
-		  [["xiāng", "yuē"],["jiàn", "zào"],["shāng", "liáng"],["jià", "shǐ"],["hōng", "zhà"],["zàn", "shǎng"]], # lesson 4
-	      ]
+	bookChinese4=[
+			["花束", "香气","温暖","露水","枕头","睫毛","撒"], # lesson 1
+			["享受", "森林","相信","杂草","繁密","枝丫","朝气蓬勃","凳子"], # lesson 2
+			["快乐","金枪鱼","漆黑","充满","彩虹","果冻","清凉"],      # lesson 3
+			["相约","建造","商量","驾驶","轰炸","赞赏"],      # lesson 4
+		    ]
 

@@ -133,6 +133,23 @@ def LineComposition(lesson):
 	gPageLine += 1
 	return line
 
+# -------------------------------------------------------------------------------------------------------- #
+# -----------------------GENERATE PINYIN FROM CHINESE WORDS ---------------------------------------------- #
+# -------------------------------------------------------------------------------------------------------- #
+def GenerateLessonPinyin(lesson):
+	pinyinLesson = []
+	for index in range(0,len(lesson)):
+		pinyin = GenerateWordPinyin(lesson[index])
+		pinyinWord = pinyin.split('-')
+		pinyinLesson.append(pinyinWord)
+	return pinyinLesson
+
+def GenerateWordPinyin(word):
+	from xpinyin import Pinyin
+	p = Pinyin()
+	pinyin =  p.get_pinyin(unicode(word),show_tone_marks=True)
+	return pinyin
+
 
 # --------------------------------------------------------------------------------------------------------- #
 # --------------------FUNCTIONS TO GENERATE THE WORDS IN LESSONS------------------------------------------- #
@@ -156,11 +173,6 @@ def GenerateWords(lesson,pdf):
 		DrawGrid(gPageCurrYPo,pdf)
 		gPageCurrYPo -= gGridHe
 		gPageCurrYPo -= gBlankHe
-#		if (gPageCurrYPo < (gPageBottonPo + 50)):
-#			CreateNewPage(pdf)
-#		f_word.write('\n')
-#		PrintGrid(f_word)
-#		f_word.write('\n')
 	gNextLesson = 0
 	gPosition = 0
 
@@ -197,12 +209,12 @@ if __name__ == '__main__':
 	isErrorWordsIncluded = 1 # whether to generate the words in the error list or not
 	
 	books = Books()
-	book = books.book4       # select the fourth book in the elementary school
+	bookChinese = books.bookChinese4       # select the fourth book in the elementary school
 	title = books.lessonTitle4 
 	cards = Cards()
-	card = cards.card4       # select the fourth card in the elementary school
+	cardChinese = cards.cardChinese4       # select the fourth card in the elementary school
 	errors = Errors() 
-	error = errors.error4    # select the fourth error words in the elementary school
+	errorChinese = errors.errorChinese4    # select the fourth error words in the elementary school
 
 	line = ''
 	f_word = canvas.Canvas('Dictation.pdf')
@@ -217,17 +229,20 @@ if __name__ == '__main__':
 		if (isBookIncluded == 1):
 			f_word.drawString(gPageCurrXPo, gPageCurrYPo,SubBookTitle(lessons[less],f_word))
 			gPageCurrYPo -= gLessonSubTitleHe
-			lesson = book[lessons[less] - 1]
+			#lesson = book[lessons[less] - 1]
+			lesson = GenerateLessonPinyin(bookChinese[lessons[less] - 1])
 			GenerateWords(lesson,f_word)
 		if (isCardIncluded == 1):
 			f_word.drawString(gPageCurrXPo,gPageCurrYPo,SubCardTitle(lessons[less],f_word))
 			gPageCurrYPo -= gLessonSubTitleHe
-			lesson = card[lessons[less] - 1]
+			#lesson = card[lessons[less] - 1]
+			lesson = GenerateLessonPinyin(cardChinese[lessons[less] - 1]) 
 			GenerateWords(lesson,f_word)
 		if (isErrorWordsIncluded == 1):
-			f_word.drawString(gPageCurrXPo,gPageCurrYPo,SubCardTitle(lessons[less],f_word))
+			f_word.drawString(gPageCurrXPo,gPageCurrYPo,SubErrorTitle(lessons[less],f_word))
 			gPageCurrYPo -= gLessonSubTitleHe
-			lesson = error[lessons[less] - 1]
+			#lesson = error[lessons[less] - 1]
+			lesson = GenerateLessonPinyin(errorChinese[lessons[less] - 1]) 
 			GenerateWords(lesson,f_word)
 
 		CreateNewPage(f_word)
