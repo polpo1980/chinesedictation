@@ -12,5 +12,5 @@ How to generate the PDF which contains the dictation form
 
 python chinesedictation.py
 
-Know Bugs
+Known Bugs
 * It is unable to hundle the polyphonic characters
