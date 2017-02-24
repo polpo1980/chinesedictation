@@ -322,10 +322,10 @@ def CreateNewPage(pdf):
 
 if __name__ == '__main__':
 	
-	lessons = [4]            # the lessions need to be generated, it is a array
+	lessons = [1,2,3,4]            # the lessions need to be generated, it is a array
 	isBookIncluded = 1       # whether to generate words in the book or not 
 	isCardIncluded = 1       # whether to generate words in the card or not
-	isErrorWordsIncluded = 0 # whether to generate the words in the error list or not
+	isErrorWordsIncluded = 1 # whether to generate the words in the error list or not
 	isSentencesIncluded = 1  # whether to generate the sentences in the book or not
 	
 	books = Books()
@@ -358,14 +358,16 @@ if __name__ == '__main__':
 			wordList = cardChinese[lessons[less] - 1]
 			DrawWordOneLesson(wordList,f_word)
 		if (isErrorWordsIncluded == 1):
-			DrawSubTitle(SubTitleError(lessons[less],f_word),f_word)
 			#wordList = error[lessons[less] - 1]
 			wordList = errorChinese[lessons[less] - 1]
-			DrawWordOneLesson(wordList,f_word)
+			if (len(wordList) != 0):
+				DrawSubTitle(SubTitleError(lessons[less],f_word),f_word)
+				DrawWordOneLesson(wordList,f_word)
 		if (isSentencesIncluded == 1):
-			DrawSubTitle(SubTitleSentence(lessons[less],f_word),f_word)
 			sentencesList = sentencesChinese[lessons[less] - 1]
-			DrawSentencesOneLesson(sentencesList,f_word)
+			if(len(sentencesList) != 0):
+				DrawSubTitle(SubTitleSentence(lessons[less],f_word),f_word)
+				DrawSentencesOneLesson(sentencesList,f_word)
 
 
 		CreateNewPage(f_word)
