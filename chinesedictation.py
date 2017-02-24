@@ -44,6 +44,7 @@ gPageCurrYPo = 0
 gPosition = 0         # the position of the word sequence in generating the dication
 gNextLesson = 0       # whether to generate the next lesson or not
 gPageLine = 0         # the line number of the page
+gWordsInLine = 8      # the maximum words that can be contained in one line
 
 # -------------------------------------------------------------------------------------- #
 # --------------------------------FUNCTIONS TO LAYOUT THE OUTPUT FILE------------------- #
@@ -133,6 +134,31 @@ def LineComposition(lesson):
 	gPageLine += 1
 	return line
 
+def WordLineComposition(Lesson):
+	global gPosition
+	global gWordsInLine
+	global gNextLesson
+
+	wordsInLine = 0
+	wordLine = []
+	for word in range(gPosition, len(Lesson)):
+		wordsInLine += len(Lesson[word])
+		wordLine.append(Lesson[word])
+		gPosition += 1
+		if (wordsInLine == gWordsInLine):
+			break
+		elif(wordsInLine > gWordsInLine):
+			gPosition -= 1
+			wordLine = wordLine[:(len(wordLine) - 1)]
+			break
+		else:
+			wordsInLine += 1
+	if (gPosition == len(Lesson)):
+		gNextLesson = 1
+	return wordLine
+			
+
+
 # -------------------------------------------------------------------------------------------------------- #
 # -----------------------GENERATE PINYIN FROM CHINESE WORDS ---------------------------------------------- #
 # -------------------------------------------------------------------------------------------------------- #
@@ -166,15 +192,34 @@ def GenerateWords(lesson,pdf):
 	while(gNextLesson == 0):
 		if (gPageCurrYPo < (gPageBottonPo + 50)):
 			CreateNewPage(pdf)
-		line = LineComposition(lesson)
+		#line = LineComposition(lesson)
+		line = WordLineComposition(lesson)
 		pdf.setFont('pinyin',14)
-		DrawLine(gPageCurrXPo,gPageCurrYPo,line,pdf)
+		#DrawLine(gPageCurrXPo,gPageCurrYPo,line,pdf)
+		DrawWordLine(gPageCurrXPo,gPageCurrYPo,line,pdf)
 		gPageCurrYPo -= gPinyinHe
 		DrawGrid(gPageCurrYPo,pdf)
 		gPageCurrYPo -= gGridHe
 		gPageCurrYPo -= gBlankHe
 	gNextLesson = 0
 	gPosition = 0
+
+def DrawWordLine(x,y,line,pdf):
+	currentChar = 0
+	pinyin = ''
+	for word in range(0,len(line)):
+		charNo = len(line[word])
+		for char in range(0,charNo):
+			charLen = len(line[word][char]) - 1
+			for blank in range(0, (7-charLen)/2):
+				pinyin += ' '
+			pinyin += line[word][char]
+			for blan in range(0,(7-charLen)/2):
+				pinyin += ' '
+			pdf.drawString(x + currentChar * 60, y, pinyin)
+			currentChar += 1
+			pinyin = ''
+		currentChar += 1
 
 def DrawLine(x,y,line,pdf):
 	pdf.drawString(x,y,line)
@@ -203,7 +248,7 @@ def CreateNewPage(pdf):
 
 if __name__ == '__main__':
 	
-	lessons = [4]            # the lessions need to be generated, it is a array
+	lessons = [1,2,3,4]            # the lessions need to be generated, it is a array
 	isBookIncluded = 1       # whether to generate words in the book or not 
 	isCardIncluded = 1       # whether to generate words in the card or not
 	isErrorWordsIncluded = 0 # whether to generate the words in the error list or not
