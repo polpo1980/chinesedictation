@@ -17,4 +17,10 @@ class Books(object):
 			["快乐","金枪鱼","漆黑","充满","彩虹","果冻","清凉"],      # lesson 3
 			["相约","建造","商量","驾驶","轰炸","赞赏"],      # lesson 4
 		    ]
+	bookSentence4 = [
+  			 [],    # lesson 1
+			 [],    # lesson 2
+			 [],    # lesson 3
+			 ["于是,我们趴在沙滩上,从四面八方挖着地道."],    # lesson 4
+                        ]
 

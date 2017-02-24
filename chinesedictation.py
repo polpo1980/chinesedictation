@@ -59,22 +59,27 @@ def Title(number,pdf):
 	return titleStr
 
 # generate the sub title for the sequence number of the specific lession
-def SubBookTitle(number,pdf):
+def SubTitleBook(number,pdf):
 	pdf.setFont('STSong-Light',14)
 	#subTitle = "语文书第 " + str(number) + " 课 \n"
 	subTitleStr = "语文书课文词语 \n"
 	return subTitleStr
 
-def SubCardTitle(number,pdf):
+def SubTitleCard(number,pdf):
 	pdf.setFont('STSong-Light',14)
 	#subTitle = "语文卡片第 " + str(number) + " 课 \n"
 	subTitleStr = "卡片词语 \n"
 	return subTitleStr
 
-def SubErrorTitle(number,pdf):
+def SubTitleError(number,pdf):
 	pdf.setFont('STSong-Light',14)
 	#subTitle = "语文错词第 " + str(number) +" 课\n"
 	subTitleStr = "默写错误词语 \n"
+	return subTitleStr
+
+def SubTitleSentence(number,pdf):
+	pdf.setFont('STSong-Light',14)
+	subTitleStr = "默写课文句子 \n"
 	return subTitleStr
 
 def PrintGrid(file_handler):
@@ -245,10 +250,57 @@ def DrawGrid(startYPo, pdf):
 		pdf.line(50+30+index*60,startYPo,50+30+index*60,startYPo-60)
 	pdf.line(50,startYPo-30,530,startYPo-30)
 
-# draw the pinyin on the canvas for the entire lesson
+# draw the pinyin on the canvas for words in an entire lesson
 def DrawWordOneLesson(wordList,pdf):
-	lesson = GenerateLessonPinyin(wordList)
-	GenerateWords(lesson,pdf)
+	lessonWords = GenerateLessonPinyin(wordList)
+	GenerateWords(lessonWords,pdf)
+
+# draw the pinyin on the canvas for the sentences in an entire lesson
+def DrawSentencesOneLesson(sentencesList,pdf):
+	for sent in range(0,len(sentencesList)):
+		sentence = sentencesList[sent]
+		DrawOneSentence(sentence,pdf)
+
+# draw the pinyin for a single sentence
+def DrawOneSentence(sentence,pdf):
+	global gPageCurrYPo
+	global gPageCurrXPo
+	global gPinyinHe
+	global gGridHe
+	global gBlankHe
+	global gPageBottonPo
+
+	currPos = 0
+	sentenceWords = GenerateWordPinyin(sentence)
+	wordList = sentenceWords.split('-')
+	#wordList.append(words)
+
+	while (currPos < len(wordList)):
+		if (gPageCurrYPo < (gPageBottonPo + 50)):
+			CreateNewPage(pdf)
+		if ((len(wordList) - currPos) > 8):
+			wordLine = [wordList[currPos:currPos+8]]
+			currPos += 8
+			
+			pdf.setFont('pinyin',14)
+			DrawWordLine(gPageCurrXPo,gPageCurrYPo,wordLine,pdf)
+			gPageCurrYPo -= gPinyinHe
+			DrawGrid(gPageCurrYPo,pdf)
+			gPageCurrYPo -= gGridHe
+			gPageCurrYPo -= gBlankHe
+		else:
+			wordLine = [wordList[currPos:len(wordList)]]
+			
+			pdf.setFont('pinyin',14)
+			DrawWordLine(gPageCurrXPo,gPageCurrYPo,wordLine,pdf)
+			gPageCurrYPo -= gPinyinHe
+			DrawGrid(gPageCurrYPo,pdf)
+			gPageCurrYPo -= gGridHe
+			gPageCurrYPo -= gBlankHe
+			
+			currPos = len(wordList)
+
+
 
 # draw the sub title within one lesson
 def DrawSubTitle(title,pdf):
@@ -270,14 +322,16 @@ def CreateNewPage(pdf):
 
 if __name__ == '__main__':
 	
-	lessons = [1,2,3,4]            # the lessions need to be generated, it is a array
+	lessons = [4]            # the lessions need to be generated, it is a array
 	isBookIncluded = 1       # whether to generate words in the book or not 
 	isCardIncluded = 1       # whether to generate words in the card or not
 	isErrorWordsIncluded = 0 # whether to generate the words in the error list or not
+	isSentencesIncluded = 1  # whether to generate the sentences in the book or not
 	
 	books = Books()
-	bookChinese = books.bookChinese4       # select the fourth book in the elementary school
+	bookChinese = books.bookChinese4       # select words in the fourth book in the elementary school
 	title = books.lessonTitle4 
+	sentencesChinese = books.bookSentence4 # select the sentences in the fourth book in the elementary school
 	cards = Cards()
 	cardChinese = cards.cardChinese4       # select the fourth card in the elementary school
 	errors = Errors() 
@@ -294,20 +348,25 @@ if __name__ == '__main__':
 		f_word.drawString(200,gPageCurrYPo,Title(lessons[less],f_word))
 		gPageCurrYPo -= gLessonTitleHe
 		if (isBookIncluded == 1):
-			DrawSubTitle(SubBookTitle(lessons[less],f_word),f_word)
+			DrawSubTitle(SubTitleBook(lessons[less],f_word),f_word)
 			#wordList = book[lessons[less] - 1]
 			wordList = bookChinese[lessons[less] - 1]
 			DrawWordOneLesson(wordList,f_word)
 		if (isCardIncluded == 1):
-			DrawSubTitle(SubCardTitle(lessons[less],f_word),f_word)
+			DrawSubTitle(SubTitleCard(lessons[less],f_word),f_word)
 			#wordList = card[lessons[less] - 1]
 			wordList = cardChinese[lessons[less] - 1]
 			DrawWordOneLesson(wordList,f_word)
 		if (isErrorWordsIncluded == 1):
-			DrawSubTitle(SubErrorTitle(lessons[less],f_word),f_word)
+			DrawSubTitle(SubTitleError(lessons[less],f_word),f_word)
 			#wordList = error[lessons[less] - 1]
 			wordList = errorChinese[lessons[less] - 1]
 			DrawWordOneLesson(wordList,f_word)
+		if (isSentencesIncluded == 1):
+			DrawSubTitle(SubTitleSentence(lessons[less],f_word),f_word)
+			sentencesList = sentencesChinese[lessons[less] - 1]
+			DrawSentencesOneLesson(sentencesList,f_word)
+
 
 		CreateNewPage(f_word)
 
