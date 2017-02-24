@@ -1,5 +1,7 @@
 #!/usr/bin/python
 #coding=utf-8
+#author Minqi Zhou
+
 import random
 import datetime
 import sys
@@ -134,6 +136,7 @@ def LineComposition(lesson):
 	gPageLine += 1
 	return line
 
+# compose a word line, which is a list, containing a set of pinyin of words
 def WordLineComposition(Lesson):
 	global gPosition
 	global gWordsInLine
@@ -162,6 +165,8 @@ def WordLineComposition(Lesson):
 # -------------------------------------------------------------------------------------------------------- #
 # -----------------------GENERATE PINYIN FROM CHINESE WORDS ---------------------------------------------- #
 # -------------------------------------------------------------------------------------------------------- #
+
+# generate all the pinyin for all words in the all lesson
 def GenerateLessonPinyin(lesson):
 	pinyinLesson = []
 	for index in range(0,len(lesson)):
@@ -170,6 +175,7 @@ def GenerateLessonPinyin(lesson):
 		pinyinLesson.append(pinyinWord)
 	return pinyinLesson
 
+# generate pinyin for a single word
 def GenerateWordPinyin(word):
 	from xpinyin import Pinyin
 	p = Pinyin()
@@ -204,6 +210,7 @@ def GenerateWords(lesson,pdf):
 	gNextLesson = 0
 	gPosition = 0
 
+# draw words in one line on the canvas, which is drawn in the word by word manner
 def DrawWordLine(x,y,line,pdf):
 	currentChar = 0
 	pinyin = ''
@@ -221,9 +228,11 @@ def DrawWordLine(x,y,line,pdf):
 			pinyin = ''
 		currentChar += 1
 
+# draw a complete word line on the canvas, where the word line is composed first
 def DrawLine(x,y,line,pdf):
 	pdf.drawString(x,y,line)
 
+# draw a line of grid on the canvas. the grid is the dianzi grid
 def DrawGrid(startYPo, pdf):
 	from reportlab.lib.colors import pink,black,red,blue,green
 	pdf.setStrokeColor(pink)
@@ -236,6 +245,13 @@ def DrawGrid(startYPo, pdf):
 		pdf.line(50+30+index*60,startYPo,50+30+index*60,startYPo-60)
 	pdf.line(50,startYPo-30,530,startYPo-30)
 
+# draw the pinyin on the canvas for the entire lesson
+def DrawOneLesson(wordList,pdf):
+	lesson = GenerateLessonPinyin(wordList)
+	GenerateWords(lesson,pdf)
+
+
+# create a new page in the pdf file
 def CreateNewPage(pdf):
 	global gPageCurrXPo
 	global gPageCurrYPo
@@ -274,21 +290,21 @@ if __name__ == '__main__':
 		if (isBookIncluded == 1):
 			f_word.drawString(gPageCurrXPo, gPageCurrYPo,SubBookTitle(lessons[less],f_word))
 			gPageCurrYPo -= gLessonSubTitleHe
-			#lesson = book[lessons[less] - 1]
-			lesson = GenerateLessonPinyin(bookChinese[lessons[less] - 1])
-			GenerateWords(lesson,f_word)
+			#wordList = book[lessons[less] - 1]
+			wordList = bookChinese[lessons[less] - 1]
+			DrawOneLesson(wordList,f_word)
 		if (isCardIncluded == 1):
 			f_word.drawString(gPageCurrXPo,gPageCurrYPo,SubCardTitle(lessons[less],f_word))
 			gPageCurrYPo -= gLessonSubTitleHe
-			#lesson = card[lessons[less] - 1]
-			lesson = GenerateLessonPinyin(cardChinese[lessons[less] - 1]) 
-			GenerateWords(lesson,f_word)
+			#wordList = card[lessons[less] - 1]
+			wordList = cardChinese[lessons[less] - 1]
+			DrawOneLesson(wordList,f_word)
 		if (isErrorWordsIncluded == 1):
 			f_word.drawString(gPageCurrXPo,gPageCurrYPo,SubErrorTitle(lessons[less],f_word))
 			gPageCurrYPo -= gLessonSubTitleHe
-			#lesson = error[lessons[less] - 1]
-			lesson = GenerateLessonPinyin(errorChinese[lessons[less] - 1]) 
-			GenerateWords(lesson,f_word)
+			#wordList = error[lessons[less] - 1]
+			wordList = errorChinese[lessons[less] - 1]
+			DrawOneLesson(wordList,f_word)
 
 		CreateNewPage(f_word)
 
