@@ -246,10 +246,16 @@ def DrawGrid(startYPo, pdf):
 	pdf.line(50,startYPo-30,530,startYPo-30)
 
 # draw the pinyin on the canvas for the entire lesson
-def DrawOneLesson(wordList,pdf):
+def DrawWordOneLesson(wordList,pdf):
 	lesson = GenerateLessonPinyin(wordList)
 	GenerateWords(lesson,pdf)
 
+# draw the sub title within one lesson
+def DrawSubTitle(title,pdf):
+	global gPageCurrXPo
+	global gPageCurrYPo
+	pdf.drawString(gPageCurrXPo, gPageCurrYPo,title)
+	gPageCurrYPo -= gLessonSubTitleHe
 
 # create a new page in the pdf file
 def CreateNewPage(pdf):
@@ -288,23 +294,20 @@ if __name__ == '__main__':
 		f_word.drawString(200,gPageCurrYPo,Title(lessons[less],f_word))
 		gPageCurrYPo -= gLessonTitleHe
 		if (isBookIncluded == 1):
-			f_word.drawString(gPageCurrXPo, gPageCurrYPo,SubBookTitle(lessons[less],f_word))
-			gPageCurrYPo -= gLessonSubTitleHe
+			DrawSubTitle(SubBookTitle(lessons[less],f_word),f_word)
 			#wordList = book[lessons[less] - 1]
 			wordList = bookChinese[lessons[less] - 1]
-			DrawOneLesson(wordList,f_word)
+			DrawWordOneLesson(wordList,f_word)
 		if (isCardIncluded == 1):
-			f_word.drawString(gPageCurrXPo,gPageCurrYPo,SubCardTitle(lessons[less],f_word))
-			gPageCurrYPo -= gLessonSubTitleHe
+			DrawSubTitle(SubCardTitle(lessons[less],f_word),f_word)
 			#wordList = card[lessons[less] - 1]
 			wordList = cardChinese[lessons[less] - 1]
-			DrawOneLesson(wordList,f_word)
+			DrawWordOneLesson(wordList,f_word)
 		if (isErrorWordsIncluded == 1):
-			f_word.drawString(gPageCurrXPo,gPageCurrYPo,SubErrorTitle(lessons[less],f_word))
-			gPageCurrYPo -= gLessonSubTitleHe
+			DrawSubTitle(SubErrorTitle(lessons[less],f_word),f_word)
 			#wordList = error[lessons[less] - 1]
 			wordList = errorChinese[lessons[less] - 1]
-			DrawOneLesson(wordList,f_word)
+			DrawWordOneLesson(wordList,f_word)
 
 		CreateNewPage(f_word)
 
