@@ -342,7 +342,7 @@ def CreateNewPage(pdf):
 
 if __name__ == '__main__':
 	
-	lessons = [5]            # the lessions need to be generated, it is a array
+	lessons = [1,2,3,4,5]            # the lessions need to be generated, it is a array
 	isBookIncluded = 1       # whether to generate words in the book or not 
 	isCardIncluded = 1       # whether to generate words in the card or not
 	isErrorWordsIncluded = 1 # whether to generate the words in the error list or not
