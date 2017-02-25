@@ -4,6 +4,10 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
+# please notice that: as for the polyphonic characters, add the correct pinyin code righte after the chinese word
+# 注意:对于多音字,请在中文字后加入正确的拼音编码
+# example: "载(zai4)客", "记载(zai3)"  
+
 class Books(object):
 	lessonTitle4 = [
 		       "太阳的话",         # lesson 1
@@ -23,7 +27,7 @@ class Books(object):
   			 [],    # lesson 1
 			 [],    # lesson 2
 			 [],    # lesson 3
-			 ["于是,我们趴在沙滩上,从四面八方挖着地道."],    # lesson 4
+			 ["于是,我们趴在沙滩上,从四面八方挖着(zhe4)地道."],    # lesson 4
 			 ["在这里,我可以读书,可以幻想."],                # lesson 5
                     ]
 

@@ -177,6 +177,7 @@ def GenerateLessonPinyin(lesson):
 	for index in range(0,len(lesson)):
 		pinyin = GenerateWordPinyin(lesson[index])
 		pinyinWord = pinyin.split('-')
+		pinyinWord = ProcessPolyPhonic(pinyinWord)
 		pinyinLesson.append(pinyinWord)
 	return pinyinLesson
 
@@ -187,6 +188,24 @@ def GenerateWordPinyin(word):
 	pinyin =  p.get_pinyin(unicode(word),show_tone_marks=True)
 	return pinyin
 
+# decode pinyin: as for the polyphonic characters, we provided the pinyin code, for example zhe4, and we need to decode the code to original pinyin
+def DecodePinyin(code):
+	from xpinyin import Pinyin
+	p = Pinyin()
+	pinyin = p.decode_pinyin(code)
+	return pinyin
+
+# process the polyphonic characters in within a word or within a sentence
+def ProcessPolyPhonic(sentence):
+	word = 0           # starts from the first word
+	while (word <  len(sentence)):
+		if (sentence[word][0] == '('):
+			polyPhonic =  DecodePinyin(sentence[word])
+			sentence[word - 1] = polyPhonic
+			del(sentence[word])
+		word += 1
+
+	return sentence
 
 # --------------------------------------------------------------------------------------------------------- #
 # --------------------FUNCTIONS TO GENERATE THE WORDS IN LESSONS------------------------------------------- #
@@ -274,6 +293,7 @@ def DrawOneSentence(sentence,pdf):
 	sentenceWords = GenerateWordPinyin(sentence)
 	wordList = sentenceWords.split('-')
 	#wordList.append(words)
+	wordList = ProcessPolyPhonic(wordList)
 
 	while (currPos < len(wordList)):
 		if (gPageCurrYPo < (gPageBottonPo + 50)):
@@ -322,7 +342,7 @@ def CreateNewPage(pdf):
 
 if __name__ == '__main__':
 	
-	lessons = [1,2,3,4]            # the lessions need to be generated, it is a array
+	lessons = [5]            # the lessions need to be generated, it is a array
 	isBookIncluded = 1       # whether to generate words in the book or not 
 	isCardIncluded = 1       # whether to generate words in the card or not
 	isErrorWordsIncluded = 1 # whether to generate the words in the error list or not
@@ -344,6 +364,7 @@ if __name__ == '__main__':
 	gPageCurrXPo = gPageLeftPo
 	gPageCurrYPo = gPageTopPo
 
+	
 	for less in range(0,len(lessons)):
 		f_word.drawString(200,gPageCurrYPo,Title(lessons[less],f_word))
 		gPageCurrYPo -= gLessonTitleHe
