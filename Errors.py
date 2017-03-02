@@ -14,9 +14,8 @@ class Errors(object):
 				["捆绑","铺天盖地"],  #lesson 2
 				["充满"],  #lesson 3
 				["腾云驾雾","挖洞","插花"], # lesson 4
-				[],                         # lesson 4
 				["墙壁"],                    # lesson 5
-				[],                          # lesson 6
+				["徘徊","细语"],                          # lesson 6
 			[],      # lesson 7
 			[],      # lesson 8
 			[],      # lesson 9

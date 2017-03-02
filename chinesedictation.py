@@ -352,7 +352,7 @@ if __name__ == '__main__':
 
 	isBookIncluded = 1       # whether to generate words in the book or not 
 	isCardIncluded = 1       # whether to generate words in the card or not
-	isErrorWordsIncluded = 0 # whether to generate the words in the error list or not
+	isErrorWordsIncluded = 1 # whether to generate the words in the error list or not
 	isSentencesIncluded = 1  # whether to generate the sentences in the book or not
 	
 	books = Books()
@@ -388,9 +388,9 @@ if __name__ == '__main__':
 			#wordList = card[lessons[less] - 1]
 			wordList = cardChinese[lessons[less] - 1]
 			DrawWordOneLesson(wordList,f_word)
-		if (isErrorWordsIncluded == 1):
+		if ((isErrorWordsIncluded == 1) and (lessons[less] > 1)):
 			#wordList = error[lessons[less] - 1]
-			wordList = errorChinese[lessons[less] - 1]
+			wordList = errorChinese[lessons[less] - 1 - 1]
 			if (len(wordList) != 0):
 				DrawSubTitle(SubTitleError(lessons[less],f_word),f_word)
 				DrawWordOneLesson(wordList,f_word)
