@@ -82,6 +82,11 @@ def SubTitleSentence(number,pdf):
 	subTitleStr = "默写课文句子 \n"
 	return subTitleStr
 
+def TitleHappyPalace(number,pdf):
+	pdf.setFont('STSong-Light',14)
+	subTitleStr = "语文快乐宫 " + str(number) + " \n"
+	return subTitleStr
+
 def PrintGrid(file_handler):
 	file_handler.write(" _______________________________________________________________________________\n")
 	file_handler.write("|    ¦    |    ¦    |    ¦    |    ¦    |    ¦    |    ¦    |    ¦    |    ¦    |\n")
@@ -342,20 +347,25 @@ def CreateNewPage(pdf):
 
 if __name__ == '__main__':
 	
-	lessons = [1,2,3,4,5]            # the lessions need to be generated, it is a array
+	lessons = [7]            # the lessons need to be generated, it is an array
+	happyPalaces = []       # the happy palaces nees to be generated, it is an array
+
 	isBookIncluded = 1       # whether to generate words in the book or not 
 	isCardIncluded = 1       # whether to generate words in the card or not
-	isErrorWordsIncluded = 1 # whether to generate the words in the error list or not
+	isErrorWordsIncluded = 0 # whether to generate the words in the error list or not
 	isSentencesIncluded = 1  # whether to generate the sentences in the book or not
 	
 	books = Books()
 	bookChinese = books.bookChinese4       # select words in the fourth book in the elementary school
 	title = books.lessonTitle4 
+	bookHappyChinese = books.bookHappyChinese4        # select words in the happy palace in the fourth book
 	sentencesChinese = books.bookSentence4 # select the sentences in the fourth book in the elementary school
 	cards = Cards()
 	cardChinese = cards.cardChinese4       # select the fourth card in the elementary school
+	cardHappyChinese = cards.cardHappyChinese4 # select the happy palaces in the fourth card in the elementary school
 	errors = Errors() 
 	errorChinese = errors.errorChinese4    # select the fourth error words in the elementary school
+	errorHappyChinese = errors.errorHappyChinese4  # select the happy palace
 
 	line = ''
 	f_word = canvas.Canvas('Dictation.pdf')
@@ -389,8 +399,30 @@ if __name__ == '__main__':
 			if(len(sentencesList) != 0):
 				DrawSubTitle(SubTitleSentence(lessons[less],f_word),f_word)
 				DrawSentencesOneLesson(sentencesList,f_word)
+		CreateNewPage(f_word)
 
-
+	gPageCurrXPo = gPageLeftPo
+	gPageCurrYPo = gPageTopPo
+	
+	for palace in range(0,len(happyPalaces)):
+		f_word.drawString(200,gPageCurrYPo,TitleHappyPalace(happyPalaces[palace],f_word))
+		gPageCurrYPo -= gLessonTitleHe
+		if (isBookIncluded == 1):
+			DrawSubTitle(SubTitleBook(happyPalaces[palace],f_word),f_word)
+			#wordList = book[lessons[less] - 1]
+			wordList = bookHappyChinese[happyPalaces[palace] - 1]
+			DrawWordOneLesson(wordList,f_word)
+		if (isCardIncluded == 1):
+			DrawSubTitle(SubTitleCard(happyPalaces[palace],f_word),f_word)
+			#wordList = card[lessons[less] - 1]
+			wordList = cardHappyChinese[happyPalaces[palace] - 1]
+			DrawWordOneLesson(wordList,f_word)
+		if (isErrorWordsIncluded == 1):
+			#wordList = error[lessons[less] - 1]
+			wordList = errorHappyChinese[happyPalaces[palace] - 1]
+			if (len(wordList) != 0):
+				DrawSubTitle(SubTitleError(lessons[less],f_word),f_word)
+				DrawWordOneLesson(wordList,f_word)
 		CreateNewPage(f_word)
 
 	#f_word.showPage()
