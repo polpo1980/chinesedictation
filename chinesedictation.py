@@ -30,7 +30,7 @@ from Errors import Errors
 # global variables
 # setup the hight of the content on the A4 paper letter
 gPageTopPo = 750        # the top position (y) of starting to print the content on each page
-gPageBottonPo = 50      # the botton position (y) of ending to print the content on each page
+gPageBottomPo = 50      # the botton position (y) of ending to print the content on each page
 gPageLeftPo = 50        # the left position (x) of starting to print the content on each page
 gLessonTitleHe = 20     # the height of the lesson title
 gLessonSubTitleHe = 20  # the height of the lesson sub title
@@ -74,7 +74,7 @@ def SubTitleCard(number,pdf):
 def SubTitleError(number,pdf):
 	pdf.setFont('STSong-Light',14)
 	#subTitle = "语文错词第 " + str(number) +" 课\n"
-	subTitleStr = "默写错误词语 \n"
+	subTitleStr = "默写第   " + str(number) + "   课中的错误词语 \n"
 	return subTitleStr
 
 def SubTitleSentence(number,pdf):
@@ -222,10 +222,10 @@ def GenerateWords(lesson,pdf):
 	global gPageLine
 	global gPageCurrYPo
 	global gPageCurrXPo
-	global gPageBottonPo
+	global gPageBottomPo
 
 	while(gNextLesson == 0):
-		if (gPageCurrYPo < (gPageBottonPo + 50)):
+		if (gPageCurrYPo < (gPageBottomPo + 50)):
 			CreateNewPage(pdf)
 		#line = LineComposition(lesson)
 		line = WordLineComposition(lesson)
@@ -292,7 +292,7 @@ def DrawOneSentence(sentence,pdf):
 	global gPinyinHe
 	global gGridHe
 	global gBlankHe
-	global gPageBottonPo
+	global gPageBottomPo
 
 	currPos = 0
 	sentenceWords = GenerateWordPinyin(sentence)
@@ -301,7 +301,7 @@ def DrawOneSentence(sentence,pdf):
 	wordList = ProcessPolyPhonic(wordList)
 
 	while (currPos < len(wordList)):
-		if (gPageCurrYPo < (gPageBottonPo + 50)):
+		if (gPageCurrYPo < (gPageBottomPo + 50)):
 			CreateNewPage(pdf)
 		if ((len(wordList) - currPos) > 8):
 			wordLine = [wordList[currPos:currPos+8]]
@@ -347,7 +347,7 @@ def CreateNewPage(pdf):
 
 if __name__ == '__main__':
 	
-	lessons = [7]            # the lessons need to be generated, it is an array
+	lessons = [1,2,3,4,5,6,7,8]            # the lessons need to be generated, it is an array
 	happyPalaces = []       # the happy palaces nees to be generated, it is an array
 
 	isBookIncluded = 1       # whether to generate words in the book or not 
@@ -392,7 +392,7 @@ if __name__ == '__main__':
 			#wordList = error[lessons[less] - 1]
 			wordList = errorChinese[lessons[less] - 1 - 1]
 			if (len(wordList) != 0):
-				DrawSubTitle(SubTitleError(lessons[less],f_word),f_word)
+				DrawSubTitle(SubTitleError(lessons[less] - 1,f_word),f_word)
 				DrawWordOneLesson(wordList,f_word)
 		if (isSentencesIncluded == 1):
 			sentencesList = sentencesChinese[lessons[less] - 1]
